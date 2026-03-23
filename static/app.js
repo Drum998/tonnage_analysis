@@ -40,6 +40,14 @@ function destroyCharts() {
   }
 }
 
+function updatePrintHeading() {
+  const species = document.getElementById("species").value || "Unknown species";
+  const startDate = document.getElementById("start_date").value || "N/A";
+  const endDate = document.getElementById("end_date").value || "N/A";
+  const heading = document.getElementById("printHeading");
+  heading.textContent = `Species: ${species} | Date Range: ${startDate} to ${endDate}`;
+}
+
 function movingAverage(values, windowSize) {
   const result = [];
   const safeWindow = Math.max(1, windowSize);
@@ -173,16 +181,29 @@ async function fetchTimeseries(event) {
   }
 
   renderCharts(payload.data);
+  updatePrintHeading();
   setMessage("Charts updated.");
+}
+
+function printChart() {
+  if (!combinedChart) {
+    setMessage("Load chart data before printing.", true);
+    return;
+  }
+  updatePrintHeading();
+  combinedChart.resize();
+  window.print();
 }
 
 async function initialize() {
   document.getElementById("start_date").value = "2025-01-01";
   document.getElementById("end_date").value = "2025-12-31";
   document.getElementById("filters").addEventListener("submit", fetchTimeseries);
+  document.getElementById("printChartButton").addEventListener("click", printChart);
 
   try {
     await loadSpecies();
+    updatePrintHeading();
     setMessage("Select filters and click Load Charts.");
   } catch (err) {
     setMessage(err.message || "Initialization error.", true);

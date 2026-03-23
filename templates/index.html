@@ -51,10 +51,46 @@
       padding: 12px;
       border-radius: 6px;
     }
+    #printHeading {
+      display: none;
+      margin: 0 0 10px 0;
+      font-size: 18px;
+    }
     .message {
       margin-top: 10px;
       min-height: 20px;
       font-size: 14px;
+    }
+    @page {
+      size: landscape;
+      margin: 12mm;
+    }
+    @media print {
+      body {
+        margin: 0;
+        background: #fff;
+      }
+      .container {
+        max-width: none;
+        box-shadow: none;
+        border-radius: 0;
+        padding: 0;
+      }
+      h1, p, form, #message, .chart-wrap > h3 {
+        display: none !important;
+      }
+      #printHeading {
+        display: block;
+      }
+      .chart-wrap {
+        margin: 0;
+        border: 0;
+        padding: 0;
+      }
+      #combinedChart {
+        width: 100% !important;
+        height: 75vh !important;
+      }
     }
   </style>
 </head>
@@ -81,11 +117,15 @@
       <div class="control-group">
         <button type="submit">Load Charts</button>
       </div>
+      <div class="control-group">
+        <button id="printChartButton" type="button">Print Chart</button>
+      </div>
     </form>
 
     <div id="message" class="message"></div>
 
     <div class="chart-wrap">
+      <h2 id="printHeading"></h2>
       <h3>Price vs Tonnage (Dual Axis)</h3>
       <canvas id="combinedChart"></canvas>
     </div>
