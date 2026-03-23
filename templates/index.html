@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Market Data Charts</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 24px;
+      background: #f7f7f7;
+      color: #222;
+    }
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+    }
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: end;
+      margin-bottom: 20px;
+    }
+    .control-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      min-width: 200px;
+    }
+    label {
+      font-size: 14px;
+      font-weight: 600;
+    }
+    select, input, button {
+      padding: 8px;
+      font-size: 14px;
+    }
+    button {
+      cursor: pointer;
+    }
+    .chart-wrap {
+      margin-top: 20px;
+      background: #fff;
+      border: 1px solid #ddd;
+      padding: 12px;
+      border-radius: 6px;
+    }
+    .message {
+      margin-top: 10px;
+      min-height: 20px;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Market Data Explorer</h1>
+    <p>View average price per KG and total tonnage by date.</p>
+
+    <form id="filters" class="controls">
+      <div class="control-group">
+        <label for="species">Species</label>
+        <select id="species" name="species" required>
+          <option value="">Loading species...</option>
+        </select>
+      </div>
+      <div class="control-group">
+        <label for="start_date">Start Date</label>
+        <input id="start_date" name="start_date" type="date" required>
+      </div>
+      <div class="control-group">
+        <label for="end_date">End Date</label>
+        <input id="end_date" name="end_date" type="date" required>
+      </div>
+      <div class="control-group">
+        <button type="submit">Load Charts</button>
+      </div>
+    </form>
+
+    <div id="message" class="message"></div>
+
+    <div class="chart-wrap">
+      <h3>Price vs Tonnage (Dual Axis)</h3>
+      <canvas id="combinedChart"></canvas>
+    </div>
+  </div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

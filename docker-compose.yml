@@ -1,0 +1,9 @@
+services:
+  web:
+    build: .
+    container_name: tonnage-analysis-flask
+    ports:
+      - "5055:5000"
+    env_file:
+      - example.env
+    restart: unless-stopped
