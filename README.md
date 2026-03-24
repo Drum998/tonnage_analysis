@@ -1,15 +1,17 @@
-# Market Data Flask App
+# Market Data Explorer
 
-This Flask app reads MySQL market data from the `market_data.brixham` table and displays:
+A Flask app that reads MySQL market data from the `market_data.brixham` table and displays:
 
 - average `Price/KG` per day
-- total `Weight` per day
+- total tonnage (Weight) per day
 
 The UI provides:
 
 - species dropdown
-- start date picker
-- end date picker
+- start and end date pickers
+- preset date range buttons (Last Week, Last Month, Last 3 Months, This Month, Last Year, Last 12 Months, Year to Date)
+- interactive Price vs Tonnage chart with 21-day moving average
+- print chart support
 
 ## Required environment variables
 
@@ -57,7 +59,17 @@ Open:
 
 `http://localhost:5055`
 
+## Testing
+
+Run unit tests:
+
+```bash
+python run_tests.py
+```
+
+See [docs/TESTING.md](docs/TESTING.md) for details.
+
 ## API endpoints
 
-- `GET /api/species`
-- `GET /api/timeseries?species=<name>&start_date=YYYY-MM-DD&end_date=YYYY-MM-DD`
+- `GET /api/species` - returns normalized species list
+- `GET /api/timeseries?species=<name>&start_date=YYYY-MM-DD&end_date=YYYY-MM-DD` - returns daily averages and tonnage

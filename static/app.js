@@ -16,6 +16,79 @@ function toISODateInput(daysDelta = 0) {
   return `${year}-${month}-${day}`;
 }
 
+function formatDate(d) {
+  const year = d.getFullYear();
+  const month = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
+function getPresetRange(presetId) {
+  const today = new Date();
+  let start;
+  let end;
+
+  switch (presetId) {
+    case "last_week": {
+      const startDate = new Date(today);
+      startDate.setDate(startDate.getDate() - 7);
+      start = formatDate(startDate);
+      end = formatDate(today);
+      break;
+    }
+    case "last_month": {
+      const prevMonth = new Date(today.getFullYear(), today.getMonth() - 1, 1);
+      start = formatDate(prevMonth);
+      const lastDay = new Date(today.getFullYear(), today.getMonth(), 0);
+      end = formatDate(lastDay);
+      break;
+    }
+    case "last_3_months": {
+      const startDate = new Date(today);
+      startDate.setMonth(startDate.getMonth() - 3);
+      start = formatDate(startDate);
+      end = formatDate(today);
+      break;
+    }
+    case "this_month": {
+      const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
+      start = formatDate(firstDay);
+      end = formatDate(today);
+      break;
+    }
+    case "last_year": {
+      const prevYear = today.getFullYear() - 1;
+      start = `${prevYear}-01-01`;
+      end = `${prevYear}-12-31`;
+      break;
+    }
+    case "last_12_months": {
+      const startDate = new Date(today);
+      startDate.setDate(startDate.getDate() - 365);
+      start = formatDate(startDate);
+      end = formatDate(today);
+      break;
+    }
+    case "year_to_date": {
+      start = `${today.getFullYear()}-01-01`;
+      end = formatDate(today);
+      break;
+    }
+    default:
+      return null;
+  }
+
+  return { start, end };
+}
+
+function applyPreset(presetId) {
+  const range = getPresetRange(presetId);
+  if (!range) return;
+  document.getElementById("start_date").value = range.start;
+  document.getElementById("end_date").value = range.end;
+  updatePrintHeading();
+}
+
 async function loadSpecies() {
   const speciesEl = document.getElementById("species");
   speciesEl.innerHTML = "<option value=''>Select species</option>";
@@ -200,6 +273,12 @@ async function initialize() {
   document.getElementById("end_date").value = "2025-12-31";
   document.getElementById("filters").addEventListener("submit", fetchTimeseries);
   document.getElementById("printChartButton").addEventListener("click", printChart);
+  document.getElementById("filters").addEventListener("click", (e) => {
+    const btn = e.target.closest(".preset-btn");
+    if (btn && btn.dataset.preset) {
+      applyPreset(btn.dataset.preset);
+    }
+  });
 
   try {
     await loadSpecies();

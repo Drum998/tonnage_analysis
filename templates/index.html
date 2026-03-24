@@ -8,7 +8,7 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      margin: 24px;
+      margin: 16px;
       background: #f7f7f7;
       color: #222;
     }
@@ -16,22 +16,33 @@
       max-width: 1100px;
       margin: 0 auto;
       background: #fff;
-      padding: 20px;
+      padding: 16px;
       border-radius: 8px;
       box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
     }
     .controls {
       display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    .controls-row {
+      display: flex;
       flex-wrap: wrap;
-      gap: 12px;
+      gap: 10px;
       align-items: end;
-      margin-bottom: 20px;
     }
     .control-group {
       display: flex;
       flex-direction: column;
-      gap: 6px;
-      min-width: 200px;
+      gap: 4px;
+      min-width: 140px;
+    }
+    .preset-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
     }
     label {
       font-size: 14px;
@@ -45,10 +56,10 @@
       cursor: pointer;
     }
     .chart-wrap {
-      margin-top: 20px;
+      margin-top: 12px;
       background: #fff;
       border: 1px solid #ddd;
-      padding: 12px;
+      padding: 10px;
       border-radius: 6px;
     }
     #printHeading {
@@ -57,7 +68,7 @@
       font-size: 18px;
     }
     .message {
-      margin-top: 10px;
+      margin-top: 8px;
       min-height: 20px;
       font-size: 14px;
     }
@@ -100,24 +111,33 @@
     <p>View average price per KG and total tonnage by date.</p>
 
     <form id="filters" class="controls">
-      <div class="control-group">
-        <label for="species">Species</label>
-        <select id="species" name="species" required>
-          <option value="">Loading species...</option>
-        </select>
+      <div class="controls-row">
+        <div class="control-group">
+          <label for="species">Species</label>
+          <select id="species" name="species" required>
+            <option value="">Loading species...</option>
+          </select>
+        </div>
+        <div class="control-group">
+          <label for="start_date">Start Date</label>
+          <input id="start_date" name="start_date" type="date" required>
+        </div>
+        <div class="control-group">
+          <label for="end_date">End Date</label>
+          <input id="end_date" name="end_date" type="date" required>
+        </div>
       </div>
-      <div class="control-group">
-        <label for="start_date">Start Date</label>
-        <input id="start_date" name="start_date" type="date" required>
+      <div class="controls-row preset-row">
+        <button type="button" class="preset-btn" data-preset="last_week">Last Week</button>
+        <button type="button" class="preset-btn" data-preset="last_month">Last Month</button>
+        <button type="button" class="preset-btn" data-preset="last_3_months">Last 3 Months</button>
+        <button type="button" class="preset-btn" data-preset="this_month">This Month</button>
+        <button type="button" class="preset-btn" data-preset="last_year">Last Year</button>
+        <button type="button" class="preset-btn" data-preset="last_12_months">Last 12 Months</button>
+        <button type="button" class="preset-btn" data-preset="year_to_date">Year to Date</button>
       </div>
-      <div class="control-group">
-        <label for="end_date">End Date</label>
-        <input id="end_date" name="end_date" type="date" required>
-      </div>
-      <div class="control-group">
+      <div class="controls-row">
         <button type="submit">Load Charts</button>
-      </div>
-      <div class="control-group">
         <button id="printChartButton" type="button">Print Chart</button>
       </div>
     </form>
@@ -126,7 +146,7 @@
 
     <div class="chart-wrap">
       <h2 id="printHeading"></h2>
-      <h3>Price vs Tonnage (Dual Axis)</h3>
+      <h3>Price vs Tonnage</h3>
       <canvas id="combinedChart"></canvas>
     </div>
   </div>

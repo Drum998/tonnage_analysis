@@ -3,3 +3,4 @@ SQLAlchemy
 PyMySQL
 python-dotenv
 gunicorn
+pytest
