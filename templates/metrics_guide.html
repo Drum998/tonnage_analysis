@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Metrics Guide</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 16px;
+      background: #f7f7f7;
+      color: #222;
+    }
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 16px;
+      border-radius: 8px;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+    }
+    .topbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+    .topbar a {
+      color: #0b84f3;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .topbar a:hover {
+      text-decoration: underline;
+    }
+    h1 {
+      margin: 6px 0 4px 0;
+      font-size: 22px;
+    }
+    h2 {
+      margin-top: 18px;
+      font-size: 18px;
+    }
+    h3 {
+      margin-top: 14px;
+      font-size: 16px;
+    }
+    p, li {
+      line-height: 1.4;
+    }
+    code {
+      background: #f0f4f8;
+      padding: 1px 4px;
+      border-radius: 4px;
+    }
+    .callout {
+      background: #f0f4f8;
+      border: 1px solid #d7e3f4;
+      border-radius: 6px;
+      padding: 10px 12px;
+      margin: 12px 0;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+    @media (min-width: 820px) {
+      .grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="topbar">
+      <div>
+        <a href="/metrics">Back to Metrics</a>
+      </div>
+      <div>
+        <a href="/">Home</a>
+      </div>
+    </div>
+
+    <h1>Metrics page guide</h1>
+    <p>
+      The Metrics page is a quick way to understand activity (how many lots), volume (how many kg),
+      value (GBP), and price behavior (level, spread, and volatility) for a single species over a date range.
+      Most charts are smoothed with a <b>21-day moving average</b> to reduce day-to-day noise.
+    </p>
+
+    <div class="callout">
+      <b>Important</b>
+      <ul>
+        <li>All calculations are based on the raw lots in the selected date range after species normalization.</li>
+        <li>Units: tonnage is shown as <b>kg</b> and value is in <b>GBP (GBP symbol shown as "GBP" in this guide)</b>.</li>
+        <li>Smoothing can hide short spikes; if you need exact daily values, treat the charts as trend indicators.</li>
+      </ul>
+    </div>
+
+    <h2>Filters and presets</h2>
+    <ul>
+      <li><b>Species</b>: Select the species you want to analyze (normalized names are used internally).</li>
+      <li><b>Date range</b>: The metrics include only lots whose market date falls between <code>start_date</code> and <code>end_date</code> (inclusive).</li>
+      <li><b>Preset buttons</b>: Quick date windows (Last Week, Last Month, etc.). These only set the date inputs; click "Load Metrics" to refresh charts.</li>
+    </ul>
+
+    <h2>Summary cards (top row)</h2>
+    <div class="grid">
+      <div>
+        <h3>Total Lots</h3>
+        <p>
+          Count of lots for the selected species and date range.
+          Use it as an activity indicator: rising lot counts can mean more consistent landings or more fragmented lotting.
+        </p>
+      </div>
+      <div>
+        <h3>Total Tonnage (kg)</h3>
+        <p>
+          Sum of lot weights in kg for the selected period.
+          Use it as a volume indicator. If tonnage rises but lots do not, average lot size may be increasing.
+        </p>
+      </div>
+      <div>
+        <h3>Total Value</h3>
+        <p>
+          Sum of <code>Price/KG * Weight</code> across all included lots.
+          Use it to understand economic importance of the period, and to compare weeks/months (with care for seasonality).
+        </p>
+      </div>
+      <div>
+        <h3>Avg Price/KG</h3>
+        <p>
+          Overall average of lot <code>Price/KG</code> across the period (simple average by lot, not weighted by kg).
+          Use it as a quick price level indicator, but pair it with median and volatility for context.
+        </p>
+      </div>
+      <div>
+        <h3>WoW Value Change</h3>
+        <p>
+          Week-over-week percentage change in value based on the last 7 days vs the prior 7 days inside your selected range.
+          It appears only when there is enough data (at least 14 days in the selection, and prior-week value is not zero).
+        </p>
+      </div>
+      <div>
+        <h3>MoM Value Change</h3>
+        <p>
+          Month-over-month percentage change in value based on the last 30 days vs the prior 30 days inside your selected range.
+          It appears only when there is enough data (at least 60 days in the selection, and prior-month value is not zero).
+        </p>
+      </div>
+      <div>
+        <h3>Price-Tonnage Correlation</h3>
+        <p>
+          Correlation between daily average price/kg and daily total tonnage over the selected range.
+          A negative value can suggest higher volumes are associated with lower prices (and vice versa), but correlation is not causation.
+        </p>
+      </div>
+    </div>
+
+    <h2>Charts</h2>
+
+    <h3>Lot Count and Total Value Over Time</h3>
+    <ul>
+      <li><b>Lot Count</b>: 21-day moving average of daily lot counts.</li>
+      <li><b>Total Value (GBP)</b>: 21-day moving average of daily total value (sum of <code>Price/KG * Weight</code>).</li>
+    </ul>
+    <p>
+      Use this chart to separate "more activity" from "higher value". For example, value can rise because
+      prices rise, tonnage rises, or both (even if lot count is flat).
+    </p>
+
+    <h3>Price Distribution (Min, Max, Median, Avg) Over Time</h3>
+    <ul>
+      <li><b>Min / Max Price/KG</b>: Daily minimum and maximum lot price/kg (then smoothed).</li>
+      <li><b>Median Price/KG</b>: Daily median lot price/kg (then smoothed). Often more robust to outliers than the average.</li>
+      <li><b>Avg Price/KG</b>: Daily average lot price/kg (then smoothed).</li>
+    </ul>
+    <p>
+      Use this chart to understand whether changes in "typical" price (median) are happening, or whether only
+      extremes are moving (min/max widening). If median is flat but max is rising, premium lots may be driving headlines.
+    </p>
+
+    <h3>Average Lot Size Over Time</h3>
+    <p>
+      21-day moving average of daily average lot size in kg (daily total kg divided by daily lot count).
+      Use it to detect shifts in market structure: larger lots can change price behavior and volatility.
+    </p>
+
+    <h3>Price Volatility (Std Dev, Coefficient of Variation)</h3>
+    <ul>
+      <li><b>Price Std Dev (GBP/kg)</b>: Standard deviation of lot price/kg within each day (then smoothed).</li>
+      <li><b>Coefficient of Variation (%)</b>: \((StdDev / AvgPrice) * 100\) per day (then smoothed).</li>
+    </ul>
+    <p>
+      Use volatility to judge confidence in "the price". High volatility means the market is paying very different prices
+      for lots on the same day (quality, size, gear, buyer mix, and reporting can all contribute).
+    </p>
+
+    <h2>Gear breakdown (when available)</h2>
+    <p>
+      If gear data exists for the selected species and period, the page shows two additional charts:
+    </p>
+    <ul>
+      <li><b>Gear Breakdown by Tonnage</b>: doughnut chart showing kg by gear, plus percent share of tonnage.</li>
+      <li><b>Gear Breakdown by Value</b>: horizontal bars showing total GBP value by gear, plus percent share of total value.</li>
+    </ul>
+    <p>
+      Use these to answer questions like "Is most of the volume/value coming from a single gear type?" and to spot mix shifts
+      that can explain changes in price and volatility.
+    </p>
+
+    <h2>Practical usage patterns</h2>
+    <ul>
+      <li><b>Trend check</b>: Start with Lot Count + Total Value to see whether change is driven by activity or economics.</li>
+      <li><b>Price sanity</b>: Compare median vs average. If they diverge, outliers may be influencing the average.</li>
+      <li><b>Stability</b>: Use CV (%) to compare volatility across species or periods (it normalizes by price level).</li>
+      <li><b>Mix effects</b>: If price moves, check gear charts and average lot size to see if composition changed.</li>
+    </ul>
+  </div>
+</body>
+</html>

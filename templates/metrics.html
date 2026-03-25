@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Market Metrics</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 16px;
+      background: #f7f7f7;
+      color: #222;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 16px;
+      border-radius: 8px;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+    }
+    .controls {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .controls-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: end;
+    }
+    .control-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      min-width: 140px;
+    }
+    .preset-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+    label {
+      font-size: 14px;
+      font-weight: 600;
+    }
+    select, input, button {
+      padding: 8px;
+      font-size: 14px;
+    }
+    button {
+      cursor: pointer;
+    }
+    .summary-cards {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .summary-card {
+      background: #f0f4f8;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      padding: 12px 16px;
+      min-width: 140px;
+    }
+    .summary-card .label {
+      font-size: 12px;
+      color: #555;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .summary-card .value {
+      font-size: 20px;
+      font-weight: 700;
+    }
+    .chart-section {
+      margin-bottom: 24px;
+      background: #fff;
+      border: 1px solid #ddd;
+      padding: 16px;
+      border-radius: 6px;
+    }
+    .chart-section h3 {
+      margin: 0 0 12px 0;
+      font-size: 16px;
+    }
+    .message {
+      margin-top: 8px;
+      min-height: 20px;
+      font-size: 14px;
+    }
+    .message.error {
+      color: #b00020;
+    }
+    .message.success {
+      color: #1f6f3f;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Market Metrics</h1>
+    <p>
+      Extended metrics: lot count, market value, price distribution, gear breakdown, and more.
+      <a href="/metrics/guide" style="margin-left: 8px; font-weight: 600; color: #0b84f3; text-decoration: none;">Metrics guide</a>
+    </p>
+
+    <form id="filters" class="controls">
+      <div class="controls-row">
+        <div class="control-group">
+          <label for="species">Species</label>
+          <select id="species" name="species" required>
+            <option value="">Loading species...</option>
+          </select>
+        </div>
+        <div class="control-group">
+          <label for="start_date">Start Date</label>
+          <input id="start_date" name="start_date" type="date" required>
+        </div>
+        <div class="control-group">
+          <label for="end_date">End Date</label>
+          <input id="end_date" name="end_date" type="date" required>
+        </div>
+      </div>
+      <div class="controls-row preset-row">
+        <button type="button" class="preset-btn" data-preset="last_week">Last Week</button>
+        <button type="button" class="preset-btn" data-preset="last_month">Last Month</button>
+        <button type="button" class="preset-btn" data-preset="last_3_months">Last 3 Months</button>
+        <button type="button" class="preset-btn" data-preset="this_month">This Month</button>
+        <button type="button" class="preset-btn" data-preset="last_year">Last Year</button>
+        <button type="button" class="preset-btn" data-preset="last_12_months">Last 12 Months</button>
+        <button type="button" class="preset-btn" data-preset="year_to_date">Year to Date</button>
+      </div>
+      <div class="controls-row">
+        <button type="submit">Load Metrics</button>
+      </div>
+    </form>
+
+    <div id="message" class="message"></div>
+
+    <div id="summarySection" class="summary-cards" style="display: none;"></div>
+
+    <div id="chartsSection" style="display: none;">
+      <div class="chart-section">
+        <h3>Lot Count and Total Value Over Time</h3>
+        <canvas id="lotValueChart" height="120"></canvas>
+      </div>
+      <div class="chart-section">
+        <h3>Price Distribution (Min, Max, Median, Avg) Over Time</h3>
+        <canvas id="priceDistributionChart" height="120"></canvas>
+      </div>
+      <div class="chart-section">
+        <h3>Average Lot Size Over Time</h3>
+        <canvas id="lotSizeChart" height="100"></canvas>
+      </div>
+      <div class="chart-section">
+        <h3>Price Volatility (Std Dev, Coefficient of Variation)</h3>
+        <canvas id="volatilityChart" height="100"></canvas>
+      </div>
+      <div id="gearSection" class="chart-section" style="display: none;">
+        <h3>Gear Breakdown by Tonnage</h3>
+        <canvas id="gearChart" height="200"></canvas>
+      </div>
+      <div id="gearValueSection" class="chart-section" style="display: none;">
+        <h3>Gear Breakdown by Value</h3>
+        <canvas id="gearValueChart" height="200"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <script src="/static/metrics.js"></script>
+</body>
+</html>

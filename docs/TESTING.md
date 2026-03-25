@@ -38,12 +38,17 @@ Tests live in the `test/` folder:
 |------|-------------|
 | `test/conftest.py` | Pytest configuration; sets required env vars so the app can be imported without a real database |
 | `test/test_normalize_species.py` | Unit tests for `_normalize_species` (species name parsing, aliases) and `_parse_iso_date` |
-| `test/test_api.py` | API endpoint tests (index, `/api/species`, `/api/timeseries`) with mocked database |
+| `test/test_api.py` | API endpoint tests (index, `/api/species`, `/api/timeseries`, metrics page, `/api/metrics`) with mocked database |
 
 ## Mocking
 
 The API tests mock the database engine. No MySQL connection is required. The `conftest.py` sets dummy values for `DB_HOST`, `DB_USER`, `DB_PASSWORD`, and `DB_DATABASE` so the app module loads; `test_api.py` patches the engine to return controlled row data.
 
+## Test coverage
+
+- **Metrics API** (`/api/metrics`): validation (species, dates, format), success with mock data, empty result, NULL/empty gear handling, daily aggregate fields, multiple-day WoW/MoM and correlation
+- **Metrics page** (`/metrics`): HTML render with controls
+
 ## Frontend
 
-The JavaScript in `static/app.js` (date presets, moving average, etc.) is not currently covered by automated tests. Manual verification or browser-based tests could be added in future.
+The JavaScript in `static/app.js` and `static/metrics.js` (date presets, moving average, chart rendering) is not currently covered by automated tests. Manual verification or browser-based tests could be added in future.

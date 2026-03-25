@@ -13,6 +13,14 @@ The UI provides:
 - interactive Price vs Tonnage chart with 21-day moving average
 - print chart support
 
+The **Metrics** page (`/metrics`) adds extended analytics with the same date range controls:
+
+- Summary cards: total lots, tonnage, value, avg price, WoW/MoM change, price-tonnage correlation
+- Lot count and total value over time (21-day smoothed)
+- Price distribution: min, max, median, avg (21-day smoothed)
+- Average lot size and price volatility over time (21-day smoothed)
+- Gear breakdown by tonnage and value (doughnut and bar charts)
+
 ## Required environment variables
 
 The app expects:
@@ -73,3 +81,9 @@ See [docs/TESTING.md](docs/TESTING.md) for details.
 
 - `GET /api/species` - returns normalized species list
 - `GET /api/timeseries?species=<name>&start_date=YYYY-MM-DD&end_date=YYYY-MM-DD` - returns daily averages and tonnage
+- `GET /api/metrics?species=<name>&start_date=YYYY-MM-DD&end_date=YYYY-MM-DD` - returns extended metrics (lot count, value, price distribution, gear breakdown)
+
+## Pages
+
+- `/` - Market Data Explorer (price vs tonnage chart)
+- `/metrics` - Market Metrics (extended metrics and charts)
